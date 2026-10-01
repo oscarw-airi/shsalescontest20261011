@@ -1,40 +1,60 @@
+
 <!DOCTYPE html>
-<html>
+<html lang="zh-HK">
 <head>
 <meta charset="UTF-8">
-<title>NeoDerm Sales Derby</title>
+<title>NeoDerm Sales War Room v5</title>
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
+
 <header>
 <h1>🏁 NeoDerm Double Month Sales Derby</h1>
-<p>2 Months Target Challenge = 150% Achievement Race</p>
+<p>Sales War Room • 2 Months 150% Challenge</p>
 </header>
 
-<div class="card">
-<h2>🏎️ Live Sales Race Track</h2>
-<div id="race"></div>
+<nav>
+<button onclick="show('race')">🏎️ Live Race</button>
+<button onclick="show('reward')">🎁 Reward Center</button>
+<button onclick="show('team')">🏢 Centre Championship</button>
+</nav>
+
+<section id="race" class="page">
+<div class="dashboard">
+<div class="card">Total Sales<h2 id="total"></h2></div>
+<div class="card">Champion<h2 id="champion"></h2></div>
+<div class="card">Legend Count<h2 id="legend"></h2></div>
 </div>
 
 <div class="card">
-<h2>🎁 Reward System</h2>
-<ul>
-<li>$400K Target: 150% = $6,000, every +$100K = +$2,000</li>
-<li>$200K Target: 150% = $3,500, every +$100K = +$1,200</li>
-<li>$100K-$150K Target: 150% = $2,000, every +$50K = +$500</li>
-<li>Below $100K: 150% = $1,000, every +$50K = +$500</li>
-</ul>
+<h2>🏎️ Evolution Track</h2>
+<div id="track"></div>
 </div>
 
 <div class="card">
-<h2>🏆 Leaderboard</h2>
-<table>
-<thead>
-<tr><th>Rank</th><th>Name</th><th>Centre</th><th>Actual</th><th>Achievement</th><th>Level</th></tr>
-</thead>
-<tbody id="table"></tbody>
-</table>
+<h2>👑 Individual Ranking</h2>
+<table id="ranking"></table>
 </div>
+</section>
+
+<section id="reward" class="page hide">
+<div class="card">
+<h2>🎁 Reward Unlock Center</h2>
+<div class="reward">
+<div>🔥 400K Target<br>150%=1.2M<br>$6,000<br>+100K = $2,000</div>
+<div>⚡ 200K Target<br>150%=600K<br>$3,500<br>+100K = $1,200</div>
+<div>🚀 100K-150K<br>$2,000<br>+50K = $500</div>
+<div>🌱 Below 100K<br>$1,000<br>+50K = $500</div>
+</div>
+</div>
+</section>
+
+<section id="team" class="page hide">
+<div class="card">
+<h2>🏢 Centre Championship</h2>
+<div id="teams"></div>
+</div>
+</section>
 
 <script src="src/app.js"></script>
 </body>

@@ -1,9 +1,2 @@
-
-# NeoDerm Sales Derby
-
-Upload this folder directly to GitHub.
-
-Enable:
-Settings → Pages → Deploy from main branch
-
-The website will run as a static GitHub Pages site.
+NeoDerm Sales Derby v5 War Room Dashboard
+Upload to GitHub Pages.
