@@ -1,61 +1,9 @@
-
-<!DOCTYPE html>
-<html lang="zh-HK">
-<head>
-<meta charset="UTF-8">
-<title>NeoDerm Sales War Room v5</title>
-<link rel="stylesheet" href="style.css">
-</head>
-<body>
-
-<header>
-<h1>🏁 NeoDerm Double Month Sales Derby</h1>
-<p>Sales War Room • 2 Months 150% Challenge</p>
-</header>
-
-<nav>
-<button onclick="show('race')">🏎️ Live Race</button>
-<button onclick="show('reward')">🎁 Reward Center</button>
-<button onclick="show('team')">🏢 Centre Championship</button>
-</nav>
-
-<section id="race" class="page">
-<div class="dashboard">
-<div class="card">Total Sales<h2 id="total"></h2></div>
-<div class="card">Champion<h2 id="champion"></h2></div>
-<div class="card">Legend Count<h2 id="legend"></h2></div>
-</div>
-
-<div class="card">
-<h2>🏎️ Evolution Track</h2>
-<div id="track"></div>
-</div>
-
-<div class="card">
-<h2>👑 Individual Ranking</h2>
-<table id="ranking"></table>
-</div>
-</section>
-
-<section id="reward" class="page hide">
-<div class="card">
-<h2>🎁 Reward Unlock Center</h2>
-<div class="reward">
-<div>🔥 400K Target<br>150%=1.2M<br>$6,000<br>+100K = $2,000</div>
-<div>⚡ 200K Target<br>150%=600K<br>$3,500<br>+100K = $1,200</div>
-<div>🚀 100K-150K<br>$2,000<br>+50K = $500</div>
-<div>🌱 Below 100K<br>$1,000<br>+50K = $500</div>
-</div>
-</div>
-</section>
-
-<section id="team" class="page hide">
-<div class="card">
-<h2>🏢 Centre Championship</h2>
-<div id="teams"></div>
-</div>
-</section>
-
-<script src="src/app.js"></script>
-</body>
-</html>
+<!doctype html><html lang="zh-HK"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>NeoDerm Double Month Sales Derby</title><link rel="stylesheet" href="style.css"></head><body>
+<header><div class="eyebrow">NEODERM • SALES WAR ROOM</div><h1>🏁 DOUBLE MONTH SALES DERBY</h1><p>2 Months Target • 150% Evolution Challenge</p><div id="connection">Connecting to Google Sheet…</div></header>
+<section class="filters"><select id="centre"><option value="ALL">ALL CENTRE</option></select><select id="target"><option value="ALL">ALL TARGET GROUP</option><option value="400000">400K TARGET</option><option value="200000">200K TARGET</option><option value="150000">100K–150K TARGET</option><option value="60000">50K–60K TARGET</option><option value="LOW">BELOW 100K TARGET</option></select><input id="search" placeholder="Search Individual"><button id="refresh">↻ Refresh</button></section>
+<section class="dashboard"><div class="metric">Total Sales<strong id="total">$0</strong></div><div class="metric">Champion<strong id="champion">—</strong></div><div class="metric">150% Legends<strong id="legends">0</strong></div><div class="metric">Participants<strong id="count">0</strong></div></section>
+<section class="panel"><div class="head"><div><div class="eyebrow">LIVE CHAMPIONSHIP</div><h2>🏎️ Evolution Race Track</h2></div><div>⚡ 100%　🚀 120%　🔥 150%</div></div><div id="race"></div></section>
+<section class="panel"><div class="eyebrow">PERSONAL BATTLE</div><h2>👤 Current Position</h2><div id="personal">No participant selected.</div></section>
+<section class="panel"><div class="eyebrow">REWARD CENTER</div><h2>🎁 Reward Roadmap</h2><div class="rewards"><div class="r400"><b>$400K TARGET</b><strong>$6,000</strong><span>150% = $1.2M</span><small>Every +$100K → +$2,000</small></div><div class="r200"><b>$200K TARGET</b><strong>$3,500</strong><span>150% = $600K</span><small>Every +$100K → +$1,200</small></div><div class="r100"><b>$100K–$150K</b><strong>$2,000</strong><span>150% threshold</span><small>Every +$50K → +$500</small></div><div class="r50"><b>$50K–$60K / BELOW $100K</b><strong>$1,000</strong><span>150% threshold</span><small>Every +$50K → +$500</small></div></div><p class="note">✈️ Travel Bonus requires Team 2-month Green Light + Individual 2-month Green Light. Columns A-D do not contain team-status data, so this is displayed as a rule only.</p></section>
+<section class="panel"><div class="head"><div><div class="eyebrow">LIVE RANKING</div><h2>🏆 Individual Leaderboard</h2></div><span id="rows"></span></div><div class="tablewrap"><table><thead><tr><th>#</th><th>Individual</th><th>Centre</th><th>Target</th><th>2M Target</th><th>Actual</th><th>Achievement</th><th>Evolution</th><th>Reward</th></tr></thead><tbody id="table"></tbody></table></div></section>
+<script src="src/app.js"></script></body></html>
