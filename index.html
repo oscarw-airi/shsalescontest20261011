@@ -1,9 +1,76 @@
-<!doctype html><html lang="zh-HK"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>NeoDerm Double Month Sales Derby</title><link rel="stylesheet" href="style.css"></head><body>
-<header><div class="eyebrow">NEODERM • SALES WAR ROOM</div><h1>🏁 DOUBLE MONTH SALES DERBY</h1><p>2 Months Target • 150% Evolution Challenge</p><div id="connection">Connecting to Google Sheet…</div></header>
-<section class="filters"><select id="centre"><option value="ALL">ALL CENTRE</option></select><select id="target"><option value="ALL">ALL TARGET GROUP</option><option value="400000">400K TARGET</option><option value="200000">200K TARGET</option><option value="150000">100K–150K TARGET</option><option value="60000">50K–60K TARGET</option><option value="LOW">BELOW 100K TARGET</option></select><input id="search" placeholder="Search Individual"><button id="refresh">↻ Refresh</button></section>
-<section class="dashboard"><div class="metric">Total Sales<strong id="total">$0</strong></div><div class="metric">Champion<strong id="champion">—</strong></div><div class="metric">150% Legends<strong id="legends">0</strong></div><div class="metric">Participants<strong id="count">0</strong></div></section>
-<section class="panel"><div class="head"><div><div class="eyebrow">LIVE CHAMPIONSHIP</div><h2>🏎️ Evolution Race Track</h2></div><div>⚡ 100%　🚀 120%　🔥 150%</div></div><div id="race"></div></section>
-<section class="panel"><div class="eyebrow">PERSONAL BATTLE</div><h2>👤 Current Position</h2><div id="personal">No participant selected.</div></section>
-<section class="panel"><div class="eyebrow">REWARD CENTER</div><h2>🎁 Reward Roadmap</h2><div class="rewards"><div class="r400"><b>$400K TARGET</b><strong>$6,000</strong><span>150% = $1.2M</span><small>Every +$100K → +$2,000</small></div><div class="r200"><b>$200K TARGET</b><strong>$3,500</strong><span>150% = $600K</span><small>Every +$100K → +$1,200</small></div><div class="r100"><b>$100K–$150K</b><strong>$2,000</strong><span>150% threshold</span><small>Every +$50K → +$500</small></div><div class="r50"><b>$50K–$60K / BELOW $100K</b><strong>$1,000</strong><span>150% threshold</span><small>Every +$50K → +$500</small></div></div><p class="note">✈️ Travel Bonus requires Team 2-month Green Light + Individual 2-month Green Light. Columns A-D do not contain team-status data, so this is displayed as a rule only.</p></section>
-<section class="panel"><div class="head"><div><div class="eyebrow">LIVE RANKING</div><h2>🏆 Individual Leaderboard</h2></div><span id="rows"></span></div><div class="tablewrap"><table><thead><tr><th>#</th><th>Individual</th><th>Centre</th><th>Target</th><th>2M Target</th><th>Actual</th><th>Achievement</th><th>Evolution</th><th>Reward</th></tr></thead><tbody id="table"></tbody></table></div></section>
-<script src="src/app.js"></script></body></html>
+<!doctype html>
+<html lang="zh-HK">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>NeoDerm Double Month Grand Prix</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<section class="hero-banner">
+  <img src="assets/double-month-banner.png" alt="雙月衝刺 10月 × 11月 Sales Contest">
+  <div class="banner-status" id="connection">CONNECTING TO LIVE RACE DATA…</div>
+</section>
+
+<section class="control-bar">
+  <div class="filter-title">🎟 PIT CREW CONTROL</div>
+  <select id="centre"><option value="ALL">ALL CENTRE</option></select>
+  <select id="target">
+    <option value="ALL">ALL TARGET GROUP</option>
+    <option value="400000">🟠 400K</option>
+    <option value="250000">🔵 250K</option>
+    <option value="150000">🟢 100K–150K</option>
+    <option value="60000">🟣 50K–60K</option>
+    <option value="LOW">🟣 BELOW 100K</option>
+  </select>
+  <input id="search" placeholder="🔎 找治療師">
+  <button id="refresh">↻ 更新賽況</button>
+</section>
+
+<main>
+<section class="race-status">
+  <div class="status-card"><div class="label">🏆 CURRENT CHAMPION</div><div id="champion" class="value">—</div><div id="championSales" class="sub">$0</div></div>
+  <div class="status-card"><div class="label">💰 TOTAL POT</div><div id="total" class="value">$0</div><div class="sub">Actual Sales</div></div>
+  <div class="status-card"><div class="label">🔥 LEGENDS</div><div id="legends" class="value">0</div><div class="sub">150% unlocked</div></div>
+  <div class="status-card"><div class="label">🏎️ DRIVERS</div><div id="count" class="value">0</div><div class="sub">in this race</div></div>
+</section>
+
+<section class="track-panel">
+  <div class="section-title">
+    <div><div class="eyebrow">LIVE RACE</div><h2>🏎️ SALES EVOLUTION TRACK</h2></div>
+    <div class="legend"><span>⚡ 100%</span><span>🚀 120%</span><span>🔥 150%</span></div>
+  </div>
+  <div class="finish-strip"><span>START</span><span>100% ⚡</span><span>120% 🚀</span><span>150% 🔥</span><span>FINISH 🏁</span></div>
+  <div id="race"></div>
+</section>
+
+<section class="driver-zone">
+  <div class="section-title"><div><div class="eyebrow">DRIVER PROFILE</div><h2>🎮 你而家跑到邊？</h2></div></div>
+  <div id="personal" class="empty">選擇或搜尋一位治療師，睇佢而家跑到邊。</div>
+</section>
+
+<section class="rewards-panel">
+  <div class="section-title"><div><div class="eyebrow">PIT STOP REWARDS</div><h2>🎁 每過一站，就有嘢攞</h2></div></div>
+  <div class="reward-road">
+    <div class="reward-box orange"><div class="ticket">400K</div><div class="reward-title">🏆 GRAND CHAMPION</div><strong>$6,000</strong><span>150% = $1.2M</span><small>每多 $100K → +$2,000</small></div>
+    <div class="reward-box blue"><div class="ticket">250K</div><div class="reward-title">🚀 SUPER RACER</div><strong>$3,500</strong><span>150% = $750K</span><small>每多 $100K → +$1,200</small></div>
+    <div class="reward-box green"><div class="ticket">100–150K</div><div class="reward-title">⚡ FAST LANE</div><strong>$2,000</strong><span>150% threshold</span><small>每多 $50K → +$500</small></div>
+    <div class="reward-box purple"><div class="ticket">≤100K</div><div class="reward-title">🌱 ROOKIE BOOST</div><strong>$1,000</strong><span>150% threshold</span><small>每多 $50K → +$500</small></div>
+  </div>
+  <div class="travel-banner">✈️ <b>TRAVEL BONUS:</b> Team 連續兩個月 Green Light ＋ Individual 兩個月 Green Light → 解鎖旅遊獎勵。</div>
+</section>
+
+<section class="leaderboard-panel">
+  <div class="section-title"><div><div class="eyebrow">RACE RESULTS</div><h2>🏁 FINAL LAP — Individual Ranking</h2></div><span id="rows"></span></div>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>#</th><th>Driver</th><th>Centre</th><th>Target</th><th>2M Goal</th><th>Actual Sales</th><th>Race %</th><th>Evolution</th><th>Reward</th></tr></thead>
+      <tbody id="table"></tbody>
+    </table>
+  </div>
+</section>
+</main>
+<script src="src/app.js"></script>
+</body>
+</html>

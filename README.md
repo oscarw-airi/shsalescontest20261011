@@ -1,13 +1,16 @@
-# NeoDerm Sales Derby v6
+# NeoDerm Double Month Grand Prix v8
 
-Google Sheet data source is embedded in `src/app.js`.
+This version uses the uploaded Shanghai Double Month Sales Contest image as the live website's top hero banner.
 
-A = Centre
-B = Individual
-C = Target
-D = Actual Sales
+Banner file:
+`assets/double-month-banner.png`
 
-Sheet ID: 13bEDi4qQHvfYnOBOQiYgD4HSxlNAK6YWWrAkCkkikOQ
-GID: 0
+Google Sheet data source:
+- Spreadsheet ID: 13bEDi4qQHvfYnOBOQiYgD4HSxlNAK6YWWrAkCkkikOQ
+- GID: 0
+- Column A = Centre
+- Column B = Individual
+- Column C = Target
+- Column D = Actual Sales
 
-The Google Sheet must allow public viewing/export for GitHub Pages to read it directly.
+Upload the whole project to GitHub and enable GitHub Pages.
