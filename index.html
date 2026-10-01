@@ -7,7 +7,6 @@
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
-
 <section class="hero-banner">
   <img src="assets/double-month-banner.png" alt="雙月衝刺 10月 × 11月 Sales Contest">
   <div class="banner-status" id="connection">CONNECTING TO LIVE RACE DATA…</div>
@@ -21,24 +20,30 @@
     <option value="400000">🟠 400K</option>
     <option value="250000">🔵 250K</option>
     <option value="150000">🟢 100K–150K</option>
-    <option value="60000">🟣 50K–60K</option>
     <option value="LOW">🟣 BELOW 100K</option>
   </select>
   <input id="search" placeholder="🔎 找治療師">
   <button id="refresh">↻ 更新賽況</button>
 </section>
 
+<section class="mission-counter">
+<div class="mission-copy"><div class="eyebrow">🎯 DOUBLE MONTH MISSION</div><h2>全員合力衝刺 <span>$30,000,000</span></h2><p>所有個人 Actual Sales 即時扣減總目標</p></div>
+<div class="counter-box"><div class="counter-label">REMAINING TO $30M</div><div id="remaining" class="remaining">$30,000,000</div><div class="counter-track"><i id="missionProgress"></i></div><div class="counter-foot"><span id="achieved">$0</span><span>$30M</span></div></div>
+</section>
+<section class="evolution-guide">
+<div class="guide-copy"><div class="eyebrow">🐱 SALES EVOLUTION</div><h2>每跑過一個 Sales Checkpoint，貓就進化一次</h2><p>跑道只睇 Actual Sales 金額，不用 100% / 120% / 150% 表示距離。</p></div>
+<div class="evolution-steps"><div class="step"><span>🎯</span><b>Target</b><small>起跑門檻</small></div><div class="arrow">→</div><div class="step diamond"><span>💎</span><b>1 × Target</b><small>鑽石進化</small></div><div class="arrow">→</div><div class="step gold"><span>🥇</span><b>2 × Target</b><small>黃金進化</small></div><div class="arrow">→</div><div class="step crown"><span>👑</span><b>3 × Target</b><small>皇冠進化</small></div></div>
+</section>
 <main>
 <section class="race-status">
   <div class="status-card"><div class="label">🏆 CURRENT CHAMPION</div><div id="champion" class="value">—</div><div id="championSales" class="sub">$0</div></div>
-  <div class="status-card"><div class="label">💰 TOTAL POT</div><div id="total" class="value">$0</div><div class="sub">Actual Sales</div></div>
   <div class="status-card"><div class="label">🔥 LEGENDS</div><div id="legends" class="value">0</div><div class="sub">150% unlocked</div></div>
   <div class="status-card"><div class="label">🏎️ DRIVERS</div><div id="count" class="value">0</div><div class="sub">in this race</div></div>
 </section>
 
 <section class="track-panel">
   <div class="section-title">
-    <div><div class="eyebrow">LIVE RACE</div><h2>🏎️ SALES EVOLUTION TRACK</h2></div>
+    <div><div class="eyebrow">LIVE RACE</div><h2>🐱 SALES RACE · ACTUAL SALES</h2></div>
     <div class="legend"><span>⚡ 100%</span><span>🚀 120%</span><span>🔥 150%</span></div>
   </div>
   <div class="finish-strip"><span>START</span><span>100% ⚡</span><span>120% 🚀</span><span>150% 🔥</span><span>FINISH 🏁</span></div>
@@ -56,7 +61,7 @@
     <div class="reward-box orange"><div class="ticket">400K</div><div class="reward-title">🏆 GRAND CHAMPION</div><strong>$6,000</strong><span>150% = $1.2M</span><small>每多 $100K → +$2,000</small></div>
     <div class="reward-box blue"><div class="ticket">250K</div><div class="reward-title">🚀 SUPER RACER</div><strong>$3,500</strong><span>150% = $750K</span><small>每多 $100K → +$1,200</small></div>
     <div class="reward-box green"><div class="ticket">100–150K</div><div class="reward-title">⚡ FAST LANE</div><strong>$2,000</strong><span>150% threshold</span><small>每多 $50K → +$500</small></div>
-    <div class="reward-box purple"><div class="ticket">≤100K</div><div class="reward-title">🌱 ROOKIE BOOST</div><strong>$1,000</strong><span>150% threshold</span><small>每多 $50K → +$500</small></div>
+    <div class="reward-box purple"><div class="ticket">BELOW 100K</div><div class="reward-title">🌱 ROOKIE BOOST</div><strong>$1,000</strong><span>150% threshold</span><small>每多 $50K → +$500</small></div>
   </div>
   <div class="travel-banner">✈️ <b>TRAVEL BONUS:</b> Team 連續兩個月 Green Light ＋ Individual 兩個月 Green Light → 解鎖旅遊獎勵。</div>
 </section>
