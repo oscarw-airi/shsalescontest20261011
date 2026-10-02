@@ -1,45 +1,25 @@
-# NeoDerm Double Month Grand Prix v9
+# NeoDerm 双月冲刺 v13
 
-## Data source
-Google Sheet:
-`13bEDi4qQHvfYnOBOQiYgD4HSxlNAK6YWWrAkCkkikOQ`
-
+## 数据源
+Google Sheet ID: `13bEDi4qQHvfYnOBOQiYgD4HSxlNAK6YWWrAkCkkikOQ`
 GID: `0`
 
-Fixed mapping:
-- Column A = Centre
-- Column B = Individual
-- Column C = Target
-- **Column D = Actual Sales (current total sales)**
+固定映射：
+- A = Center
+- B = Individual
+- C = Target
+- D = Actual Sales（当前个人累计实际业绩）
 
-The code deliberately ignores rows containing `Total` or `Grand Total`.
-It does not use any total/grand-total row as a driver and does not display a source total card.
+Total / Grand Total 行会被完全忽略。
 
-Target groups:
-- 400K = orange
-- 250K = blue
-- 100K–150K = green
-- Below 100K = purple
+## 进化逻辑
+- Diamond = 1 × Target
+- Gold = 2 × Target
+- Crown = 3 × Target
+- 例如 25 万 Target：25万钻石 → 50万黄金 → 75万皇冠
+- 跑道显示金额，不显示 100% / 120% / 150%。
+- Evolution Garage 必须先选择治疗师，不再默认显示业绩最高的人。
+- 治疗师姓名固定在移动中的猫咪旁边一起跑。
 
-The Shanghai Double Month banner is stored at:
-`assets/double-month-banner.png`
-
-Upload the entire folder to GitHub and enable GitHub Pages.
-
-
-## $30M Mission Counter
-Remaining = $30,000,000 - SUM(individual Actual Sales from Column D). Total / Grand Total rows are ignored.
-
-## Race Character
-Race drivers are represented by animated cat characters (🐱) instead of cars.
-
-
-## v12 logic from the cat evolution reference
-- Actual Sales is the race distance.
-- Target = Diamond checkpoint.
-- 2 × Target = Gold checkpoint.
-- 3 × Target = Crown checkpoint.
-- Example: 250K target → 250K Diamond → 500K Gold → 750K Crown.
-- Driver name is attached to the moving cat.
-- Race scale is money-based and extends to $2M.
-- The reference image is stored at `assets/cat-evolution-reference.png`.
+## GitHub Pages
+上传整个项目后，在 Settings → Pages → Deploy from main branch。

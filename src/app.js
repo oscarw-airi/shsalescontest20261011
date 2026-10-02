@@ -1,98 +1,57 @@
-
 const SHEET_ID="13bEDi4qQHvfYnOBOQiYgD4HSxlNAK6YWWrAkCkkikOQ";
 const SHEET_GID="0";
-const URLS=[
- `https://docs.google.com/spreadsheets/d/${SHEET_ID}/export?format=csv&gid=${SHEET_GID}`,
- `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&gid=${SHEET_GID}`
-];
+const CSV_URL=`https://docs.google.com/spreadsheets/d/${SHEET_ID}/export?format=csv&gid=${SHEET_GID}`;
+const FALLBACK_URL=`https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&gid=${SHEET_GID}`;
 let data=[];
 
 const $=id=>document.getElementById(id);
-const money=n=>"$"+Math.round(n||0).toLocaleString("en-US");
+const money=n=>"¥"+Math.round(n||0).toLocaleString("zh-CN");
 
-function parseNum(v){
+function num(v){
   if(typeof v==="number") return v;
-  const s=String(v??"").trim().replace(/[$,%\sHKD]/gi,"").replace(/,/g,"");
-  if(!s) return 0;
+  const s=String(v??"").trim().replace(/[\s,$¥HKD]/gi,"").replace(/,/g,"");
   const m=s.match(/-?\d+(?:\.\d+)?/);
-  return m ? Number(m[0]) : 0;
+  return m?Number(m[0]):0;
 }
-
 function csvRows(s){
-  const rows=[]; let row=[], cell="", quote=false;
+  const rows=[];let row=[],cell="",q=false;
   for(let i=0;i<s.length;i++){
-    const c=s[i], n=s[i+1];
-    if(c=='"' && quote && n=='"'){cell+='"';i++;continue}
-    if(c=='"'){quote=!quote;continue}
-    if(c=="," && !quote){row.push(cell);cell="";continue}
-    if((c=="\n"||c=="\r")&&!quote){
-      if(c=="\r"&&n=="\n")i++;
-      row.push(cell);cell="";
-      if(row.some(v=>v.trim()!=""))rows.push(row);
-      row=[];continue;
-    }
+    const c=s[i],n=s[i+1];
+    if(c=='"'&&q&&n=='"'){cell+='"';i++;continue}
+    if(c=='"'){q=!q;continue}
+    if(c==","&&!q){row.push(cell);cell="";continue}
+    if((c=="\n"||c=="\r")&&!q){if(c=="\r"&&n=="\n")i++;row.push(cell);cell="";if(row.some(v=>v.trim()!=""))rows.push(row);row=[];continue}
     cell+=c;
   }
-  row.push(cell);
-  if(row.some(v=>v.trim()!=""))rows.push(row);
-  return rows;
+  row.push(cell);if(row.some(v=>v.trim()!=""))rows.push(row);return rows;
 }
-
-/*
-  IMPORTANT DATA RULE:
-  The live Google Sheet has a fixed four-column source:
-  A = Centre
-  B = Individual
-  C = Target
-  D = Actual Sales
-
-  Column D is ALWAYS the individual's current total sales.
-  We do NOT derive Actual Sales from any other column.
-
-  Summary rows such as Grand Total / Total are ignored completely.
-*/
 function normalize(rows){
-  if(!rows.length) return [];
-  const body=rows.slice(1);
-
-  return body.map((r,i)=>({
+  if(!rows.length)return [];
+  return rows.slice(1).map((r,i)=>({
     id:i+1,
     centre:String(r[0]||"").trim(),
     name:String(r[1]||"").trim(),
-    target:parseNum(r[2]),
-    actual:parseNum(r[3]) // <-- Column D = Actual Sales
+    target:num(r[2]),
+    actual:num(r[3]) // Column D = current individual total sales
   })).filter(x=>{
-    const combined=`${x.centre} ${x.name}`.toLowerCase();
-    const summaryRow=/^(grand\s*total|total|grand total)\b/i.test(x.name)
-      || /\b(grand\s*total|total)\b/i.test(x.centre)
-      || combined.trim()==="total"
-      || combined.includes("grand total");
-    return x.name && x.target>0 && !summaryRow;
+    const text=(x.centre+" "+x.name).toLowerCase();
+    const summary=/\b(grand\s*total|total)\b/i.test(text);
+    return x.name&&x.target>0&&!summary;
   });
 }
-
-function targetGroup(t){
-  if(t>=350000)return ["🟠","400K","orange"];
-  if(t>=225000)return ["🔵","250K","blue"];
-  if(t>=100000)return ["🟢","100K–150K","green"];
-  return ["🟣","BELOW 100K","purple"];
+function group(t){
+  if(t>=350000)return ["🟠","40万组","orange"];
+  if(t>=225000)return ["🔵","25万组","blue"];
+  if(t>=100000)return ["🟢","10–15万组","green"];
+  return ["🟣","10万以下","purple"];
 }
-
-function evo(x){
+function evolution(x){
   const p=x.target?x.actual/x.target:0;
-  if(p>=3)return ["👑","CROWN",p];
-  if(p>=2)return ["🥇","GOLD",p];
-  if(p>=1)return ["💎","DIAMOND",p];
-  return ["🐱","RUNNING",p];
+  if(p>=3)return ["👑","皇冠",p,3];
+  if(p>=2)return ["🥇","黄金",p,2];
+  if(p>=1)return ["💎","钻石",p,1];
+  return ["🐱","冲刺中",p,0];
 }
-
-function checkpoint(x){
-  if(x.actual<x.target)return {label:"💎 鑽石",need:x.target-x.actual,sales:x.target};
-  if(x.actual<x.target*2)return {label:"🥇 黃金",need:x.target*2-x.actual,sales:x.target*2};
-  if(x.actual<x.target*3)return {label:"👑 皇冠",need:x.target*3-x.actual,sales:x.target*3};
-  return {label:"🏁 MAX",need:0,sales:x.target*3};
-}
-
 function reward(x){
   const threshold=x.target*3;
   if(x.actual<threshold)return 0;
@@ -101,109 +60,130 @@ function reward(x){
   if(x.target>=100000)return 2000+Math.floor((x.actual-threshold)/50000)*500;
   return 1000+Math.floor((x.actual-threshold)/50000)*500;
 }
-
 function filtered(){
-  const c=$("centre").value,t=$("target").value,q=$("search").value.toLowerCase();
+  const c=$("centre").value,t=$("target").value,q=$("search").value.trim().toLowerCase();
   return data.filter(x=>{
-    const cg=c==="ALL"||x.centre===c;
-    const tg=t==="ALL"||(t==="LOW"?x.target<100000:x.target===Number(t));
-    return cg&&tg&&x.name.toLowerCase().includes(q);
+    const a=c==="ALL"||x.centre===c;
+    const b=t==="ALL"||(t==="LOW"?x.target<100000:x.target===Number(t));
+    const d=!q||x.name.toLowerCase().includes(q);
+    return a&&b&&d;
   }).sort((a,b)=>b.actual-a.actual);
 }
-
+function spritePosition(level){
+  if(level>=3)return "100%";
+  if(level>=2)return "66.66%";
+  if(level>=1)return "33.33%";
+  return "0%";
+}
+function renderDriverOptions(list=data){
+  const selects=[$("driver"),$("evolutionDriver")];
+  selects.forEach(s=>{
+    const current=s.value;
+    s.innerHTML='<option value="">选择一位治疗师</option>';
+    list.forEach(x=>s.insertAdjacentHTML("beforeend",`<option value="${x.id}">${x.name} · ${money(x.actual)}</option>`));
+    if([...s.options].some(o=>o.value===current))s.value=current;
+  });
+}
 function render(){
-  const a=filtered();
-  const achievedAll=data.reduce((sum,x)=>sum+x.actual,0);
-  const missionTotal=30000000;
-  const remaining=Math.max(0,missionTotal-achievedAll);
-  const missionPct=Math.min(100,(achievedAll/missionTotal)*100);
-  $("remaining").textContent=money(remaining);
-  $("achieved").textContent=money(achievedAll);
-  $("missionProgress").style.width=missionPct+"%";
-  $("champion").textContent=a[0]?.name||"—";
-  $("championSales").textContent=a[0]?money(a[0].actual):"$0";
-  $("legends").textContent=a.filter(x=>evo(x)[2]>=1.5).length;
-  $("count").textContent=a.length;
-  $("rows").textContent=a.length+" drivers";
+  const list=filtered();
+  const allSales=data.reduce((s,x)=>s+x.actual,0);
+  const total=30000000;
+  const remain=Math.max(0,total-allSales);
+  $("remaining").textContent=money(remain);
+  $("achieved").textContent="已完成 "+money(allSales);
+  $("missionProgress").style.width=Math.min(100,allSales/total*100)+"%";
+  $("champion").textContent=list[0]?.name||"—";
+  $("championSales").textContent=list[0]?money(list[0].actual):"¥0";
+  $("crownCount").textContent=data.filter(x=>evolution(x)[3]>=3).length;
+  $("count").textContent=list.length;
+  $("rows").textContent=list.length+" 位";
 
-  const max=Math.max(2000000,...a.map(x=>x.actual),1);
-  const stages=[0,200000,250000,400000,500000,600000,700000,800000,1000000,1200000,1500000,2000000];
-  const stageMarkup=stages.map(v=>`<span class="milestone-badge" style="left:${Math.min(92,(v/max)*92)}%">${v===0?"START":"$"+(v/1000)+"K"}</span>`).join("");
-  $("race").innerHTML=`<div class="lane race-scale">${stageMarkup}</div>`+
-  a.map((x,i)=>{
-    const e=evo(x),g=targetGroup(x.target),pos=Math.min(92,(x.actual/max)*92);
-    const color=g[2]=="orange"?"#fb923c":g[2]=="blue"?"#60a5fa":g[2]=="green"?"#34d399":"#c084fc";
-    return `<div class="lane"><div class="car cat-driver" style="left:${pos}%"><span class="cat-trail"></span>${e[0]}🐱<span class="driver-name-tag">${x.name} · ${money(x.actual)}</span></div><div class="info"><span style="color:${color}">${g[0]} ${g[1]}</span> · ${x.centre} · ${e[1]} · ${money(x.actual)}</div></div>`;
-  }).join("")||'<div class="empty">No matching drivers.</div>';
-  $("table").innerHTML=a.map((x,i)=>{
-    const e=evo(x),g=targetGroup(x.target),r=reward(x);
-    return `<tr>
-      <td>${i+1}</td><td>${g[0]} ${x.name}</td><td>${x.centre}</td>
-      <td>${money(x.target)}</td><td>${money(x.target*2)}</td><td>${money(x.actual)}</td>
-      <td>${Math.round(e[2]*100)}%</td><td>${e[0]} ${e[1]}</td><td>${r?money(r):"🔒 Not unlocked"}</td>
-    </tr>`;
+  // Shared money scale. No 100% / 120% / 150% labels.
+  const max=Math.max(2000000,...list.map(x=>x.actual),1);
+  $("race").innerHTML=list.map((x,i)=>{
+    const e=evolution(x),g=group(x.target),pos=Math.min(92,x.actual/max*92);
+    const bg=g[2]=="orange"?"#fb923c":g[2]=="blue"?"#60a5fa":g[2]=="green"?"#34d399":"#c084fc";
+    return `<div class="lane">
+      <div class="race-cat" style="left:${pos}%;background-position:${spritePosition(e[3])} 50%">
+        <span class="cat-name">${x.name}<span class="cat-sales">${money(x.actual)}</span></span>
+      </div>
+      <div class="race-state" style="color:${bg}">${g[0]} ${g[1]} · ${e[0]} ${e[1]}</div>
+    </div>`;
+  }).join("")||'<div class="empty">没有符合条件的参赛者。</div>';
+
+  $("table").innerHTML=list.map((x,i)=>{
+    const e=evolution(x),g=group(x.target),r=reward(x);
+    return `<tr><td>${i+1}</td><td>${g[0]} ${x.name}</td><td>${x.centre}</td><td>${money(x.target)}</td><td>${money(x.target*2)}</td><td>${money(x.actual)}</td><td>${e[0]} ${e[1]}</td><td>${r?money(r):"🔒 未解锁"}</td></tr>`;
   }).join("");
 
-  if(a[0]) showDriver(a[0]);
+  renderEvolution($("evolutionDriver").value);
 }
-
-function showDriver(x){
-  const e=evo(x),r=reward(x),next=[1,1.2,1.5].find(v=>v>e[2]),g=targetGroup(x.target);
-  $("personal").innerHTML=`<div class="driver-card">
-    <div class="driver-main">
-      <div class="eyebrow">${g[0]} ${g[1]} TARGET · ${x.centre}</div>
-      <div class="driver-name">${e[0]} ${x.name}</div>
-      <div class="driver-sales">${money(x.actual)}</div>
-      <div>2-month goal: ${money(x.target*2)}</div>
-      <div class="progress"><i style="width:${Math.min(100,e[2]*100)}%"></i></div>
-      <b>${Math.round(e[2]*100)}% · ${e[1]}</b>
+function renderEvolution(id){
+  const x=data.find(v=>String(v.id)===String(id));
+  if(!x){
+    $("evolutionEmpty").classList.remove("hidden");
+    $("evolutionCard").classList.add("hidden");
+    return;
+  }
+  $("evolutionEmpty").classList.add("hidden");
+  $("evolutionCard").classList.remove("hidden");
+  const e=evolution(x),g=group(x.target);
+  const stages=[
+    {name:"钻石",sales:x.target,pos:"diamond",level:1},
+    {name:"黄金",sales:x.target*2,pos:"gold",level:2},
+    {name:"皇冠",sales:x.target*3,pos:"crown",level:3}
+  ];
+  const cards=stages.map(s=>{
+    const done=x.actual>=s.sales;
+    const need=Math.max(0,s.sales-x.actual);
+    return `<div class="evo-stage ${done?"active":""}">
+      <div class="cat-sprite ${s.pos}"></div>
+      <div class="stage-title">${s.name} ${done?"✓":"🔒"}</div>
+      <div class="stage-sales">${money(s.sales)}</div>
+      <div class="stage-state">${done?"已进化":"还差 "+money(need)}</div>
+    </div>`;
+  }).join("");
+  $("evolutionCard").innerHTML=`<div class="evo-card">
+    <div class="evo-driver">
+      <div class="eyebrow">${g[0]} ${g[1]} · ${x.centre}</div>
+      <div class="evo-driver-name">${e[0]} ${x.name}</div>
+      <div class="evo-sales">${money(x.actual)}</div>
+      <div>当前 Actual Sales</div>
+      <div class="progress"><i style="width:${Math.min(100,x.actual/(x.target*3)*100)}%"></i></div>
+      <b>下一进化：${x.actual<x.target?"💎 钻石":x.actual<x.target*2?"🥇 黄金":x.actual<x.target*3?"👑 皇冠":"🏁 全部完成"}</b>
     </div>
-    <div class="driver-next">
-      <div class="eyebrow">NEXT UNLOCK</div>
-      <div class="next-value">${next?Math.round(next*100)+"% EVOLUTION":"🏁 ALL LEVELS UNLOCKED"}</div>
-      <p>${next?`再做 <b>${money(Math.max(0,x.target*2*next-x.actual))}</b> 就到下一級。`:"你已經到達最高 Evolution。"}</p>
-      <hr style="border-color:#293a57">
-      <div class="eyebrow">CURRENT REWARD</div>
-      <h2>${r?money(r):"🔒 未解鎖"}</h2>
-      <p>${r?"獎勵已進入口袋。":"先跑到 150%，再開獎勵箱！"}</p>
-    </div>
+    <div class="evo-road">${cards}</div>
   </div>`;
 }
-
 function centres(){
   const s=$("centre"),old=s.value;
-  s.innerHTML='<option value="ALL">ALL CENTRE</option>';
+  s.innerHTML='<option value="ALL">全部中心</option>';
   [...new Set(data.map(x=>x.centre).filter(Boolean))].sort().forEach(c=>{
-    const o=document.createElement("option");
-    o.value=c;o.textContent=c;s.appendChild(o);
+    const o=document.createElement("option");o.value=c;o.textContent=c;s.appendChild(o);
   });
   if([...s.options].some(o=>o.value===old))s.value=old;
 }
-
 async function load(){
-  $("connection").textContent="CONNECTING TO LIVE RACE DATA…";
-  for(const u of URLS){
+  $("connection").textContent="正在连接实时赛况…";
+  for(const url of [CSV_URL,FALLBACK_URL]){
     try{
-      const r=await fetch(u,{cache:"no-store"});
-      if(!r.ok) continue;
-      const rows=csvRows(await r.text());
-      const parsed=normalize(rows);
+      const r=await fetch(url,{cache:"no-store"});
+      if(!r.ok)continue;
+      const parsed=normalize(csvRows(await r.text()));
       if(parsed.length){
-        data=parsed;
-        centres();
-        render();
-        $("connection").textContent=`● LIVE GOOGLE SHEET · ${data.length} DRIVERS`;
+        data=parsed;centres();renderDriverOptions();render();
+        $("connection").textContent=`● 实时数据已连接 · ${data.length} 位治疗师`;
         return;
       }
     }catch(e){}
   }
-  data=[];
-  render();
-  $("connection").textContent="⚠ LIVE DATA UNAVAILABLE · CHECK GOOGLE SHEET SHARING";
+  data=[];renderDriverOptions([]);render();
+  $("connection").textContent="⚠ 无法读取 Google Sheet，请检查公开查看权限";
 }
-
 $("centre").onchange=render;
 $("target").onchange=render;
 $("search").oninput=render;
+$("driver").onchange=()=>render();
+$("evolutionDriver").onchange=e=>renderEvolution(e.target.value);
 $("refresh").onclick=load;
 load();

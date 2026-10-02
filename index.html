@@ -1,81 +1,110 @@
 <!doctype html>
-<html lang="zh-HK">
+<html lang="zh-CN">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>NeoDerm Double Month Grand Prix</title>
+<title>NeoDerm 双月冲刺 · Sales Grand Prix</title>
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
-<section class="hero-banner">
-  <img src="assets/double-month-banner.png" alt="雙月衝刺 10月 × 11月 Sales Contest">
-  <div class="banner-status" id="connection">CONNECTING TO LIVE RACE DATA…</div>
-</section>
+<div class="top-glow"></div>
 
-<section class="control-bar">
-  <div class="filter-title">🎟 PIT CREW CONTROL</div>
-  <select id="centre"><option value="ALL">ALL CENTRE</option></select>
-  <select id="target">
-    <option value="ALL">ALL TARGET GROUP</option>
-    <option value="400000">🟠 400K</option>
-    <option value="250000">🔵 250K</option>
-    <option value="150000">🟢 100K–150K</option>
-    <option value="LOW">🟣 BELOW 100K</option>
-  </select>
-  <input id="search" placeholder="🔎 找治療師">
-  <button id="refresh">↻ 更新賽況</button>
-</section>
+<header class="hero">
+  <img src="assets/double-month-banner.png" alt="双月冲刺 10月 × 11月 销售大挑战">
+  <div class="hero-live" id="connection">正在连接实时赛况…</div>
+</header>
 
-<section class="mission-counter">
-<div class="mission-copy"><div class="eyebrow">🎯 DOUBLE MONTH MISSION</div><h2>全員合力衝刺 <span>$30,000,000</span></h2><p>所有個人 Actual Sales 即時扣減總目標</p></div>
-<div class="counter-box"><div class="counter-label">REMAINING TO $30M</div><div id="remaining" class="remaining">$30,000,000</div><div class="counter-track"><i id="missionProgress"></i></div><div class="counter-foot"><span id="achieved">$0</span><span>$30M</span></div></div>
-</section>
-<section class="evolution-guide">
-<div class="guide-copy"><div class="eyebrow">🐱 SALES EVOLUTION</div><h2>每跑過一個 Sales Checkpoint，貓就進化一次</h2><p>跑道只睇 Actual Sales 金額，不用 100% / 120% / 150% 表示距離。</p></div>
-<div class="evolution-steps"><div class="step"><span>🎯</span><b>Target</b><small>起跑門檻</small></div><div class="arrow">→</div><div class="step diamond"><span>💎</span><b>1 × Target</b><small>鑽石進化</small></div><div class="arrow">→</div><div class="step gold"><span>🥇</span><b>2 × Target</b><small>黃金進化</small></div><div class="arrow">→</div><div class="step crown"><span>👑</span><b>3 × Target</b><small>皇冠進化</small></div></div>
-</section>
-<main>
-<section class="race-status">
-  <div class="status-card"><div class="label">🏆 CURRENT CHAMPION</div><div id="champion" class="value">—</div><div id="championSales" class="sub">$0</div></div>
-  <div class="status-card"><div class="label">🔥 LEGENDS</div><div id="legends" class="value">0</div><div class="sub">150% unlocked</div></div>
-  <div class="status-card"><div class="label">🏎️ DRIVERS</div><div id="count" class="value">0</div><div class="sub">in this race</div></div>
-</section>
-
-<section class="track-panel">
-  <div class="section-title">
-    <div><div class="eyebrow">LIVE RACE</div><h2>🐱 SALES RACE · ACTUAL SALES</h2></div>
-    <div class="legend"><span>⚡ 100%</span><span>🚀 120%</span><span>🔥 150%</span></div>
+<section class="mission">
+  <div class="mission-copy">
+    <div class="eyebrow">🎯 全员总任务</div>
+    <h1>一起冲刺 <span>¥30,000,000</span></h1>
+    <p>只计算每位个人的实际业绩（Excel Column D），不读取 Total / Grand Total。</p>
   </div>
-  <div class="finish-strip"><span>START</span><span>100% ⚡</span><span>120% 🚀</span><span>150% 🔥</span><span>FINISH 🏁</span></div>
+  <div class="mission-number">
+    <div class="tiny">距离 3000 万还差</div>
+    <strong id="remaining">¥30,000,000</strong>
+    <div class="mission-bar"><i id="missionProgress"></i></div>
+    <div class="mission-meta"><span id="achieved">已完成 ¥0</span><span>目标 ¥30M</span></div>
+  </div>
+</section>
+
+<section class="controls">
+  <div class="control-label">🎟 赛道筛选</div>
+  <select id="centre"><option value="ALL">全部中心</option></select>
+  <select id="target">
+    <option value="ALL">全部目标组</option>
+    <option value="400000">🟠 40万组</option>
+    <option value="250000">🔵 25万组</option>
+    <option value="150000">🟢 10–15万组</option>
+    <option value="LOW">🟣 10万以下</option>
+  </select>
+  <select id="driver"><option value="">选择一位治疗师</option></select>
+  <input id="search" placeholder="🔎 搜索治疗师">
+  <button id="refresh">↻ 刷新赛况</button>
+</section>
+
+<main>
+<section class="stats">
+  <div class="stat"><span>🏆 当前领先</span><b id="champion">—</b><small id="championSales">¥0</small></div>
+  <div class="stat"><span>👑 皇冠选手</span><b id="crownCount">0</b><small>已完成 3 × Target</small></div>
+  <div class="stat"><span>🐱 参赛人数</span><b id="count">0</b><small>当前筛选</small></div>
+</section>
+
+<section class="race-panel">
+  <div class="section-head">
+    <div><div class="eyebrow">LIVE SALES RACE</div><h2>🐱 实际业绩赛道</h2></div>
+    <div class="target-legend">
+      <span class="orange">🟠 40万</span>
+      <span class="blue">🔵 25万</span>
+      <span class="green">🟢 10–15万</span>
+      <span class="purple">🟣 10万以下</span>
+    </div>
+  </div>
+  <div class="money-scale">
+    <span>¥0</span><span>¥20万</span><span>¥40万</span><span>¥60万</span><span>¥80万</span><span>¥100万</span><span>¥150万</span><span>¥200万</span>
+  </div>
   <div id="race"></div>
 </section>
 
-<section class="driver-zone">
-  <div class="section-title"><div><div class="eyebrow">DRIVER PROFILE</div><h2>🎮 你而家跑到邊？</h2></div></div>
-  <div id="personal" class="empty">選擇或搜尋一位治療師，睇佢而家跑到邊。</div>
-</section>
-
-<section class="rewards-panel">
-  <div class="section-title"><div><div class="eyebrow">PIT STOP REWARDS</div><h2>🎁 每過一站，就有嘢攞</h2></div></div>
-  <div class="reward-road">
-    <div class="reward-box orange"><div class="ticket">400K</div><div class="reward-title">🏆 GRAND CHAMPION</div><strong>$6,000</strong><span>150% = $1.2M</span><small>每多 $100K → +$2,000</small></div>
-    <div class="reward-box blue"><div class="ticket">250K</div><div class="reward-title">🚀 SUPER RACER</div><strong>$3,500</strong><span>150% = $750K</span><small>每多 $100K → +$1,200</small></div>
-    <div class="reward-box green"><div class="ticket">100–150K</div><div class="reward-title">⚡ FAST LANE</div><strong>$2,000</strong><span>150% threshold</span><small>每多 $50K → +$500</small></div>
-    <div class="reward-box purple"><div class="ticket">BELOW 100K</div><div class="reward-title">🌱 ROOKIE BOOST</div><strong>$1,000</strong><span>150% threshold</span><small>每多 $50K → +$500</small></div>
+<section class="evolution-panel">
+  <div class="section-head">
+    <div><div class="eyebrow">EVOLUTION GARAGE</div><h2>🎮 选择一个人，看他可以进化到哪里</h2></div>
   </div>
-  <div class="travel-banner">✈️ <b>TRAVEL BONUS:</b> Team 連續兩個月 Green Light ＋ Individual 兩個月 Green Light → 解鎖旅遊獎勵。</div>
+  <div class="evolution-select">
+    <label>选择治疗师</label>
+    <select id="evolutionDriver"><option value="">请选择</option></select>
+  </div>
+  <div id="evolutionEmpty" class="empty">请选择一位治疗师，查看他的专属进化路线。</div>
+  <div id="evolutionCard" class="hidden"></div>
 </section>
 
-<section class="leaderboard-panel">
-  <div class="section-title"><div><div class="eyebrow">RACE RESULTS</div><h2>🏁 FINAL LAP — Individual Ranking</h2></div><span id="rows"></span></div>
+<section class="reward-panel">
+  <div class="section-head">
+    <div><div class="eyebrow">REWARD GARAGE</div><h2>🎁 每突破一段，就离奖励更近</h2></div>
+  </div>
+  <div class="reward-grid">
+    <div class="reward orange-bg"><b>40万组</b><strong>¥6,000</strong><span>150% = ¥120万</span><small>之后每 +¥10万 → +¥2,000</small></div>
+    <div class="reward blue-bg"><b>25万组</b><strong>¥3,500</strong><span>150% = ¥75万</span><small>之后每 +¥10万 → +¥1,200</small></div>
+    <div class="reward green-bg"><b>10–15万组</b><strong>¥2,000</strong><span>150% 达标</span><small>之后每 +¥5万 → +¥500</small></div>
+    <div class="reward purple-bg"><b>10万以下</b><strong>¥1,000</strong><span>150% 达标</span><small>之后每 +¥5万 → +¥500</small></div>
+  </div>
+  <div class="travel">✈️ <b>旅游奖励：</b>团队连续两个月绿灯 + 个人两个月绿灯，才解锁对应旅游补贴。</div>
+</section>
+
+<section class="ranking-panel">
+  <div class="section-head">
+    <div><div class="eyebrow">RACE RESULTS</div><h2>🏁 排行榜</h2></div>
+    <span id="rows"></span>
+  </div>
   <div class="table-wrap">
     <table>
-      <thead><tr><th>#</th><th>Driver</th><th>Centre</th><th>Target</th><th>2M Goal</th><th>Actual Sales</th><th>Race %</th><th>Evolution</th><th>Reward</th></tr></thead>
+      <thead><tr><th>#</th><th>治疗师</th><th>中心</th><th>Target</th><th>双月目标</th><th>实际业绩</th><th>进化状态</th><th>当前奖励</th></tr></thead>
       <tbody id="table"></tbody>
     </table>
   </div>
 </section>
 </main>
+
 <script src="src/app.js"></script>
 </body>
 </html>
