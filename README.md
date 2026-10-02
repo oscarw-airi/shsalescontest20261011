@@ -33,3 +33,6 @@ The cat evolution artwork has been replaced with the newly supplied 2×2 transpa
 - Bottom-right = Crown
 
 The race track and Evolution Garage both use this same artwork.
+
+
+Travel reward condition: the floor must reach 150% for two consecutive months.

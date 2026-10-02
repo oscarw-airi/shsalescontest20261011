@@ -98,13 +98,20 @@ function render(){
   $("count").textContent=list.length;
   $("rows").textContent=list.length+" 位";
 
-  // Shared money scale. No 100% / 120% / 150% labels.
-  const max=Math.max(2000000,...list.map(x=>x.actual),1);
+  // Fixed money scale: ¥2M is the end of the visual track.
+  // A person's physical position is ALWAYS proportional to Column D Actual Sales.
+  const max=2000000;
+  const scaleValues=[0,200000,400000,600000,800000,1000000,1500000,2000000];
+  $("moneyScale").innerHTML=scaleValues.map(v=>{
+    const p=(v/max)*100;
+    return `<span style="left:${p}%">${v===0?"¥0":"¥"+(v/10000).toLocaleString("zh-CN")+"万"}</span>`;
+  }).join("");
+
   $("race").innerHTML=list.map((x,i)=>{
-    const e=evolution(x),g=group(x.target),pos=Math.min(92,x.actual/max*92);
+    const e=evolution(x),g=group(x.target),pos=Math.min(100,(x.actual/max)*100);
     const bg=g[2]=="orange"?"#fb923c":g[2]=="blue"?"#60a5fa":g[2]=="green"?"#34d399":"#c084fc";
     return `<div class="lane">
-      <div class="race-cat" style="left:${pos}%;background-position:${spritePosition(e[3])} 50%">
+      <div class="race-cat" style="left:calc(${pos}% - 39px);background-position:${spritePosition(e[3])}">
         <span class="cat-name">${x.name}<span class="cat-sales">${money(x.actual)}</span></span>
       </div>
       <div class="race-state" style="color:${bg}">${g[0]} ${g[1]} · ${e[0]} ${e[1]}</div>
