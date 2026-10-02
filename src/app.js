@@ -70,10 +70,10 @@ function filtered(){
   }).sort((a,b)=>b.actual-a.actual);
 }
 function spritePosition(level){
-  if(level>=3)return "100%";
-  if(level>=2)return "66.66%";
-  if(level>=1)return "33.33%";
-  return "0%";
+  if(level>=3)return "100% 100%";   // Crown
+  if(level>=2)return "0% 100%";     // Gold
+  if(level>=1)return "100% 0%";     // Diamond
+  return "0% 0%";                    // Coin / start
 }
 function renderDriverOptions(list=data){
   const selects=[$("driver"),$("evolutionDriver")];

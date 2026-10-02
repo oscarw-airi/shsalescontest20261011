@@ -23,3 +23,13 @@ Total / Grand Total 行会被完全忽略。
 
 ## GitHub Pages
 上传整个项目后，在 Settings → Pages → Deploy from main branch。
+
+
+## Updated cat evolution artwork
+The cat evolution artwork has been replaced with the newly supplied 2×2 transparent sprite sheet:
+- Top-left = Start / coin
+- Top-right = Diamond
+- Bottom-left = Gold
+- Bottom-right = Crown
+
+The race track and Evolution Garage both use this same artwork.
